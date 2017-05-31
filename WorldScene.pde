@@ -10,6 +10,7 @@ Ball ball;
 PhysicsManager phyManager;
 Cannon cannon;
 Button btn = new Button();
+float maxForce = 100000;
 
 void setup() {
   
@@ -26,7 +27,8 @@ void setup() {
   //frame2 = new InteractiveFrame(scene, loadShape("cannon.obj"));
   
   cannon.frame(0).scale(0.1f);
-  cannon.frame(0).setPosition(0,90,-10);
+  cannon.frame(0).setPosition(90,90,-10);
+  cannon.frame(0).setRotation(0,0,(-PI/4),2);
 }
 
 void draw() {
@@ -49,6 +51,7 @@ void draw() {
 
   scene.drawFrames();
   
+  println("rotacion" + cannon.frame(0).rotation().angle());
   
   GUI();
 }
@@ -74,10 +77,16 @@ void GUI(){
     
  }
 void mousePressed() {
-  if (btn.circleOver) {
-    
+  if (btn.circleOver) {    
     println("lo clikeo");
-    ball.fireCan();
+    double angle =  cannon.frame(2).rotation().angle();
+    float hForce =  maxForce * (float)Math.cos(angle);
+    float zForce =  maxForce * (float)Math.sin(angle);
+    double sigma =  cannon.frame(0).rotation().angle();
+    float xForce =  hForce * (float)Math.sin(sigma);
+    float yForce =  hForce * (float)Math.cos(sigma);
+    ball.fireCan(new Vector3f(-
+    xForce, -yForce, zForce));
   }
   if (btn.rectOver) {
     println("el recatacngulo");

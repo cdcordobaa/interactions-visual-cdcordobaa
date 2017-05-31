@@ -14,7 +14,7 @@ class Ball{
    sphere = new BSphere(p, mass, 20, -20, 10, radius);
    this.physics.addBody(sphere);
    
-   force = new BForce(new Vector3f(0, -5000, 5000));
+   force = new BForce(new Vector3f(0, 0, 0));
    
    frame = new InteractiveFrame(scene);   
    frame.setPickingPrecision(InteractiveFrame.PickingPrecision.ADAPTIVE);
@@ -50,7 +50,7 @@ class Ball{
  
  void refreshPos(Vector3f pos){
    frame.setPosition(new Vec(pos.x, pos.y, pos.z));
-   println(pos.toString());
+   //println(pos.toString());
  }
  
  void onBallView(){
@@ -58,7 +58,8 @@ class Ball{
     scene.camera().lookAt(frame.position());
  }
  
- void addForce(BObject Bobj){   
+ void addForce(BObject Bobj, Vector3f direction){
+      force.setForce(direction);
       force.apply(physics,Bobj);
       print("ya");
     
@@ -69,10 +70,10 @@ class Ball{
      return new Vector3f(pos.x() , pos.y(), pos.z());
  }
  
- void fireCan(){
-  BObject r = new BObject(p, 5, sphere, framePosToVec() , true);
+ void fireCan(Vector3f direction){
+  BObject r = new BObject(p, 10, sphere, framePosToVec() , true);
   physics.addBody(r);
-  addForce(r);
+  addForce(r, direction);
  }
  
  
